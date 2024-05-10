@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block title %}Register{% endblock %}
+
+{% block b_styling %}
+{{ super() }}
+{% endblock %}
+
+{% block extra_styling %}
+{{ super() }}
+{% endblock %}
+
+
+{% block content %}
+<body class="text-bg-dark">
+
+<div class="container">
+      <header class="d-flex flex-wrap justify-content-center py-3 mb-4">
+        <a href="{{ url_for('home') }}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+          <h3 class="float-md-start mb-0" style="color: white;"><span class="fs-4">Header</span></h3>
+        </a>
+
+        <nav class="nav nav-masthead justify-content-center float-md-end nav-pills">
+          <a class="nav-link fw-bold py-1 px-4 " style="color: white;" href="{{ url_for('home') }}">Home</a>
+
+          {% if current_user.is_authenticated is true: %}
+          <a class="nav-link fw-bold py-1 px-4 " style="color: white;" href="{{ url_for('to_do_list') }}">To-do List</a>
+          <a class="nav-link fw-bold py-1 px-4" style="color: white;" href="{{ url_for('logout') }}">Logout</a>
+          {% else: %}
+          <a class="nav-link fw-bold py-1 px-4" style="color: white;" href="{{ url_for('login') }}">Login</a>
+          <a class="nav-link fw-bold py-1 px-4 " style="color: white;" href="{{ url_for('register') }}">Register</a>
+          {% endif %}
+        </nav>
+      </header>
+    </div>
+
+<main>
+
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1>Welcome back, {{ current_user.name }}!</h1>
+        <p>This is your to-do list. Feel free to add new tasks to do, or edit/delete existing tasks.</p>
+        <p>
+          <a href="{{ url_for('add_task') }}" class="btn btn-lg btn-light fw-bold border-white bg-white">Add New Task</a>
+          <!--<a href="#" class="btn btn-primary my-2">Main call to action</a>
+          <a href="#" class="btn btn-secondary my-2">Secondary action</a>-->
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="album">
+    <div class="divider mb-5"></div>
+
+    <div class="container">
+      <h2 class="mb-5"><u>Ongoing Tasks:</u></h2>
+
+      {% for task in current_user.tasks: %}
+        {% if task.status == "Ongoing": %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h4>{{ task.name }}</h4>
+                <p class="card-text">{{ task.description }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <a type="button" class="btn btn-sm btn-outline-secondary" href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+                    <a type="button" class="btn btn-sm btn-outline-secondary" href="{{ url_for('delete_task', task_id=task.id) }}">Delete</a>
+                  </div>
+                  <small class="text-body-secondary">Status: {{ task.status }}</small>
+                  {% if task.due_date is not none: %}
+                  <small class="text-body-secondary">Due date: {{ task.due_date.strftime('%d/%m/%Y') }}</small>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+
+      </div>
+    </div>
+
+    <div class="mt-5"></div>
+    <div class="divider mb-5"></div>
+
+    <div class="container">
+      <h2 class="my-5"><u>Completed Tasks:</u></h2>
+
+      {% for task in current_user.tasks: %}
+        {% if task.status == "Completed": %}
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+          <div class="col">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h4>{{ task.name }}</h4>
+                <p class="card-text">{{ task.description }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <a type="button" class="btn btn-sm btn-outline-secondary" href="{{ url_for('edit_task', task_id=task.id) }}">Edit</a>
+                    <a type="button" class="btn btn-sm btn-outline-secondary" href="{{ url_for('delete_task', task_id=task.id) }}">Delete</a>
+                  </div>
+                  <small class="text-body-secondary">Status: {{ task.status }}</small>
+                  {% if task.due_date is not none: %}
+                  <small class="text-body-secondary">Due date: {{ task.due_date.strftime('%d/%m/%Y') }}</small>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+    </div>
+
+  </div>
+
+  <div class="mt-5"></div>
+  <div class="divider mb-5"></div>
+
+</main>
+
+<!--<footer class="text-body-secondary py-5">
+  <div class="container">
+    <p class="float-end mb-1">
+      <a href="#">Back to top</a>
+    </p>
+    <p class="mb-1">Album example is © Bootstrap, but please download and customize it for yourself!</p>
+    <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a href="/docs/5.3/getting-started/introduction/">getting started guide</a>.</p>
+  </div>
+</footer>-->
+
+{{ bootstrap.load_js() }}
+</body>
+{% endblock %}

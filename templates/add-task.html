@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% from 'bootstrap5/form.html' import render_form %}
+
+{% block title %}Add Task{% endblock %}
+
+{% block b_styling %}
+{{ super() }}
+{% endblock %}
+
+{% block extra_styling %}
+{{ super() }}
+{% endblock %}
+
+
+{% block content %}
+<body class="h-100 text-bg-dark">
+    <div class="container">
+      <header class="d-flex flex-wrap justify-content-center py-3 mb-4">
+        <a href="{{ url_for('home') }}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+          <h3 class="float-md-start mb-0" style="color: white;"><span class="fs-4">Header</span></h3>
+        </a>
+
+        <nav class="nav nav-masthead justify-content-center float-md-end nav-pills">
+          <a class="nav-link fw-bold py-1 px-4 " style="color: white;" href="{{ url_for('home') }}">Home</a>
+
+          {% if current_user.is_authenticated is true: %}
+          <a class="nav-link fw-bold py-1 px-4 " style="color: white;" href="{{ url_for('to_do_list') }}">To-do List</a>
+          <a class="nav-link fw-bold py-1 px-4" style="color: white;" href="{{ url_for('logout') }}">Logout</a>
+          {% else: %}
+          <a class="nav-link fw-bold py-1 px-4" style="color: white;" href="{{ url_for('login') }}">Login</a>
+          <a class="nav-link fw-bold py-1 px-4 " style="color: white;" href="{{ url_for('register') }}">Register</a>
+          {% endif %}
+        </nav>
+      </header>
+    </div>
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-8">
+
+      <h1 class="my-4"><u>Add a new ongoing task:</u></h1>
+
+      {{ render_form(form) }}
+
+        </div>
+      </div>
+    </div>
+
+{{ bootstrap.load_js() }}
+</body>
+{% endblock %}
